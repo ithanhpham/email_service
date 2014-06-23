@@ -2,7 +2,7 @@
 if(!defined('ACCESS') ) { die('permission denied');}
 
 /* 
- * Author: Thanh Pham
+ * author: Thanh Pham
  * usage:  call mandrill's services to send mail with params
  * helpful urls: https://mandrillapp.com/api/docs/
  * 
@@ -63,24 +63,24 @@ class mandrill {
                     $c_r = rtrim($c_r, ']'); 
                     
                     if( strpos($c_r, '"status":"error"') === false) {
-                        return( $this->status_code->get(200, json_decode($c_r)) );                    
+                        return( $this->status_code->get(200, json_decode($c_r), 'mandrill') );                    
                         
                     } else {
-                        return( $this->status_code->get(400, "Client Error: $c_r") );
+                        return( $this->status_code->get(400, "Client Error: $c_r", 'mandrill') );
                     }
                     
                 } else {
-                      return( $this->status_code->get(400, 'Invalid service URL') );
+                      return( $this->status_code->get(400, 'Invalid service URL', 'mandrill') );
                 }
                           
             } catch(Exception $e){
 
-                return( $this->status_code->get(400, $e->getMessage()) );            
+                return( $this->status_code->get(400, $e->getMessage(), 'mandrill') );            
 
             }
             
         } else {       
-            return( $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)') );
+            return( $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)', 'mandrill') );
 
         }
         

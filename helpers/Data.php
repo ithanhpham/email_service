@@ -1,13 +1,17 @@
 <?php
 if(!defined('ACCESS') ) { die('permission denied');}
 
-/* clean incoming data from forms to service */
+/* 
+ * author:  Thanh Pham
+ * purpose: clean incoming data from forms to service
+ * params:  constructor needs the $email_data 
+ */
 
 require_once('StatusCodes.php');
 
     class data {
         
-        public function __construct($email_data) {
+        public function __construct($email_data = false) {
             $this->_email_data = $email_data;
             $this->status_code = new StatusCodes;            
         }
@@ -53,13 +57,6 @@ require_once('StatusCodes.php');
 
                 if( sizeof(filter_var_array($this->_email_data, $args) ) === 6){
 
-                    //build the from and to
-
-//                    $this->_email_data['from'] = $this->_email_data['from'] . " &lt" . $this->_email_data['from_email'] . "&gt";
-//                    $this->_email_data['to']   = $this->_email_data['to'] . " &lt" . $this->_email_data['to_email'] . "&gt";                    
-                    
-                    // unset($this->_email_data['from_email'], $this->_email_data['to_email']);  
-
                 } else {
                     $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)');
                     return false;
@@ -72,14 +69,5 @@ require_once('StatusCodes.php');
             
             return true;
         }        
-        
-        //for header injection cases, arguments: reference array
-        public function sanitize(&$array) {
-
-            foreach($array as &$data) {
-                $data = str_replace(array("\r", "\n", "%0a", "%0d"), '', stripslashes($data)); 
-            }
-        }
-
 
     }

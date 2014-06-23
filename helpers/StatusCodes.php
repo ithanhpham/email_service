@@ -5,18 +5,30 @@ if(!defined('ACCESS') ) { die('permission denied');}
 
 class StatusCodes {
     
-    public function get($en, $em) {
+    public function get($en, $em, $source = null) {
         
         if(isset($en) && isset($em) ){
             
-            if($en >= 200 && $en < 300) {
-                $this->status = array('status' => $en, 'result' => $em);
-                return($this->status);
-                
+            if(isset($source)) {
+                if($en >= 200 && $en < 300) {
+                    $this->status = array('status' => $en, 'source' => $source, 'result' => $em);
+                    return($this->status);
+
+                } else {
+                    $this->error  = array('error' => $en, 'source' => $source, 'result' => $em);
+                    return($this->error);
+                }                
             } else {
-                $this->error  = array('error' => $en, 'result' => $em);
-                return($this->error);
+                if($en >= 200 && $en < 300) {
+                    $this->status = array('status' => $en, 'result' => $em);
+                    return($this->status);
+
+                } else {
+                    $this->error  = array('error' => $en, 'result' => $em);
+                    return($this->error);
+                }                               
             }
+
         }            
     }    
 }

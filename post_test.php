@@ -5,7 +5,9 @@
  * purpose: test posting to mailer
  */
 
-$url = 'http://localhost:8888/email_service/controller/mailer';
+//local $url = 'http://localhost:8888/email_service/controller/mailer';
+$url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
+
 $email_data  = array('from'       => 'Thanh Pham',
                      'from_email' => 'artofguitar@gmail.com',
                      'to'         => 'Tester',

@@ -7,7 +7,7 @@ project: An Email service that uses two proiders; a main one and a backup in cas
 
 track: backend
 
-reason: I chose the email service because I enjoy writing backend code, have some experience using mailgun in our dev portal and it's something that can be re-used at some other point. I used PHP as the backend because I am most familiar with that language. I have 2.5+ years with it. 
+reason: I chose the email service because I enjoy writing backend code, have some experience using mailgun in our dev portal and it's something that can be re-used at some other point. I used PHP as the backend because I am most familiar with that language. I have 2.5+ years with it. My QA background always has me thinking about use cases which helps with the quality.
 
 trade-offs/more: The usual trade-offs of speed vs quality vs inexpensive comes into play. Due to time constraints, I wasn't able to incorporate this into a framework like CodeIgniter to give it a MVC framework. This would allow routing to be seemless and less time on writing sanitization code.
 
@@ -21,7 +21,9 @@ USAGE:
 
 the email requires a POST
 it needs to call http://thanhsguitar.com/projects/email_service/controller/mailer
-(test posting php file @ 
+test using Google's rest console and hitting the API using the required fields below (http://screencast.com/t/FfTwURKZ, http://screencast.com/t/YodfweUQ9wI)
+o you should get a response but there is a bug in the REST console that you need to attach an image as port of the request
+
 $email_data  = array('from'       => 'Thanh Pham',
                      'from_email' => 'useagmailaccount @gmail.com',
                      'to'         => 'Tester',

@@ -20,7 +20,8 @@ I don't have much public backend code I can share, but I encourage you to regist
 USAGE:
 
 the email requires a POST
-it needs to call the controller/mailer.php
+it needs to call http://thanhsguitar.com/projects/email_service/controller/mailer
+(test posting php file @ 
 $email_data  = array('from'       => 'Thanh Pham',
                      'from_email' => 'useagmailaccount @gmail.com',
                      'to'         => 'Tester',

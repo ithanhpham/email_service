@@ -11,7 +11,7 @@ $email_data  = array('from'       => 'Thanh Pham',
                      'to'         => 'Tester',
                      'to_email'   => 'artofguitar+1@gmail.com',
                      'subject'    => time() . ' Just seeing...',
-                     'text'       => 'this is my body, there are many like it but this one is mine.');
+                     'text'       => 'if this emailer is going to jump over the lazy fox.');
 
 
 $options = array(

@@ -1,4 +1,5 @@
 <?php
+if(!defined('ACCESS') ) { die('permission denied');}
 
 /* clean incoming data from forms to service */
 
@@ -18,7 +19,8 @@ require_once('StatusCodes.php');
             if(sizeof($this->_email_data) !== 6) {
                 
                 $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)');
-                exit();                                           
+//                exit();      
+                  return $this->status_code;
             }
             
             //parse the array and trim it; check if the trimmed value is empty
@@ -31,7 +33,7 @@ require_once('StatusCodes.php');
                     
                 } else {
                     $this->status_code->get(400, 'Bad Request: often a missing or empty parameters');
-                    exit();                               
+                    return false;                               
                 }
             }
             
@@ -52,19 +54,20 @@ require_once('StatusCodes.php');
                 if( sizeof(filter_var_array($this->_email_data, $args) ) === 6){
 
                     //build the from and to
-                    $this->_email_data['from'] = $this->_email_data['from'] . " &lt" . $this->_email_data['from_email'] . '&gt';
-                    $this->_email_data['to']   = $this->_email_data['to'] . " &lt" . $this->_email_data['to_email'] . '&gt';
+
+//                    $this->_email_data['from'] = $this->_email_data['from'] . " &lt" . $this->_email_data['from_email'] . "&gt";
+//                    $this->_email_data['to']   = $this->_email_data['to'] . " &lt" . $this->_email_data['to_email'] . "&gt";                    
                     
                     // unset($this->_email_data['from_email'], $this->_email_data['to_email']);  
 
                 } else {
                     $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)');
-                    exit();
+                    return false;
                 }
                 
             } else {
                 $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)');
-                exit();                                           
+                return false;                                           
             }
             
             return true;

@@ -1,4 +1,5 @@
 <?php
+if(!defined('ACCESS') ) { die('permission denied');}
 
 /* helper method for status codes */
 
@@ -10,11 +11,11 @@ class StatusCodes {
             
             if($en >= 200 && $en < 300) {
                 $this->status = array('status' => $en, 'result' => $em);
-                print_r(json_encode($this->status));
+                return($this->status);
                 
             } else {
                 $this->error  = array('error' => $en, 'result' => $em);
-                print_r(json_encode($this->error));                    
+                return($this->error);
             }
         }            
     }    

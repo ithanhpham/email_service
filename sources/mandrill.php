@@ -1,4 +1,5 @@
 <?php
+if(!defined('ACCESS') ) { die('permission denied');}
 
 /* 
  * Author: Thanh Pham
@@ -19,26 +20,17 @@ class mandrill {
     
     public function __construct($email_data) { 
 
-        //check if post
-       // if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == 'GET'){
-            $this->_email_data = $email_data;
+            $this->_email_data = $email_data->_email_data;
             $this->status_code = new StatusCodes;
-            $this->data        = new Data($this->_email_data);
-            
-        } else {
-            $this->status_code->get(405, $_SERVER['REQUEST_METHOD'] . '. Wrong HTTP method');            
-            exit();
-        }  
-        
+            $this->data        = new Data($this->_email_data);        
         
     }
     
     /*
-        method to send mandrill message 
-        this will clean and build the json, then cURL it
-        https://mandrillapp.com/api/1.0/messages/send.json
-    */
+     *  method to send mandrill message 
+     *  this will clean and build the json, then cURL it
+     *  https://mandrillapp.com/api/1.0/messages/send.json
+     */
     public function send(){ 
 
         $curl_url          = null;
@@ -71,26 +63,24 @@ class mandrill {
                     $c_r = rtrim($c_r, ']'); 
                     
                     if( strpos($c_r, '"status":"error"') === false) {
-                        $this->status_code->get(200, json_decode($c_r) );                    
-                        exit();
+                        return( $this->status_code->get(200, json_decode($c_r)) );                    
                         
                     } else {
-                        $this->status_code->get(400, "Client Error: $c_r" );
-                        exit();
+                        return( $this->status_code->get(400, "Client Error: $c_r") );
                     }
+                    
                 } else {
-                      $this->status_code->get(400, 'Invalid service URL');
-                      exit();                      
+                      return( $this->status_code->get(400, 'Invalid service URL') );
                 }
                           
             } catch(Exception $e){
 
-                $this->status_code->get(400, $e->getMessage());            
-                exit();
+                return( $this->status_code->get(400, $e->getMessage()) );            
+
             }
             
         } else {       
-            $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)');
+            return( $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)') );
 
         }
         
@@ -159,16 +149,3 @@ class mandrill {
 
     
 }
-
-
-//test data
-$email_data  = array('from'       => 'Thanh Pham',
-                     'from_email' => 'artofguitar@gmail.com',
-                     'to'         => 'Tester',
-                     'to_email'   => 'artofguitar+emailtest@gmail.com',
-                     'subject'    => 'Just seeing...',
-                     'text'       => 'this is my body, there are many like it but this one is mine.');
-
-
-$mail = new mandrill($email_data); 
-$mail->send();

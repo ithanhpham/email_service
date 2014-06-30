@@ -15,8 +15,13 @@
 class mailer {
     
     public function __construct() {
-        $this->_email_data = filter_var($_POST, FILTER_SANITIZE_STRING);
-        $this->entry       = filter_var($_GET['entry'], FILTER_SANITIZE_STRING);        
+        try {
+            $this->_email_data = @filter_var($_POST, FILTER_SANITIZE_STRING);
+        } catch(Exception $e) { }
+        
+        try {
+            $this->entry       = @filter_var($_GET['entry'], FILTER_SANITIZE_STRING);        
+        } catch(Exception $e) { }
     }
     
     public function send() {
@@ -38,7 +43,7 @@ class mailer {
             $email_data_fields = new data($form_data);
             $required_params   = $email_data_fields->cleaner(); 
 
-            if( isset($required_params->error['error']) ) {
+            if( isset($required_params->error['error']) || ($required_params === false) ) {
                 $status = array('status' => 400, 'result' => 'Missing required fields (from, from_email, to, to_email, subject, text)');
                 print_r(json_encode($status));
 

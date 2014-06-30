@@ -18,6 +18,21 @@ require_once('SystemHelper.php');
         
         //clean the data and assemble the to and from fields
         public function cleaner() {
+            //rm submit
+            try {
+                unset($this->_email_data['submit']);    
+                unset($this->_email_data['form_id']);                
+            } catch (Exception $ex) {
+
+            }
+            
+            //check if there is an address field hidden to prevent robots, if it's empty, it's good
+                if(empty($_email_data['address'])){
+                    unset($this->_email_data['address']);
+                } else { //bot attack
+                    $this->system->get_status_code(400, 'Bad Request: often a missing or empty parameters');
+                    return false;                          
+                }
 
             //check for the correct number of params
             if(sizeof($this->_email_data) !== 6) {

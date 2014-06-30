@@ -1,7 +1,0 @@
-FAILURE, MAILGUN: Client Error: {
-  "message": "'from' parameter is not a valid address. please check documentation"
-}, , , 1404089184
-FAILURE, MANDRILL: missing param, , , 1404089184
-SUCCESS, MAILGUN, no-reply@yahoo.com, dude@asdf.cas, 1404091706
-SUCCESS, MAILGUN, no-reply@emailtester.com, thanh.pham@yahoo.com, 1404091842
-SUCCESS, MAILGUN, no-reply@emailtester.com, thanh.pham@yahoo.com, 1404091947

@@ -19,10 +19,12 @@ I don't have much public backend code I can share, but I encourage you to regist
 
 USAGE:
 
-the email requires a POST
-it needs to call http://thanhsguitar.com/projects/email_service/controller/mailer
+* the email requires a POST
+
+* it needs to call http://thanhsguitar.com/projects/email_service/controller/mailer
 test using Google's rest console and hitting the API using the required fields below (http://screencast.com/t/FfTwURKZ, http://screencast.com/t/YodfweUQ9wI)
-o you should get a response but there is a bug in the REST console that you need to attach an image as port of the request
+
+* you should get a response but there is a bug in the REST console that you need to attach an image as port of the request
 
 $email_data  = array('from'       => 'Thanh Pham',
                      'from_email' => 'useagmailaccount @gmail.com',
@@ -31,5 +33,8 @@ $email_data  = array('from'       => 'Thanh Pham',
                      'subject'    => time() . ' Just seeing...',
                      'text'       => 'if some email magic is about to happen!');
 
-the logic in the controller will now try to clean the fields and make a cURL call to mail gun. If it succeeds, it will kick back a 200 status code but if not, it will try to send it via mandrill.
+* the logic in the controller will now try to clean the fields and make a cURL call to mail gun. If it succeeds, it will kick back a 200 status code but if not, it will try to send it via mandrill.
 
+* http://thanhsguitar.com/projects/email_service/form_test.php can test 
+
+* or the backend call that hardcodes items post_test.php

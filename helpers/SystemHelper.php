@@ -3,9 +3,9 @@ if(!defined('ACCESS') ) { die('permission denied');}
 
 /* helper method for status codes */
 
-class StatusCodes {
+class SystemHelper {
     
-    public function get($en, $em, $source = null) {
+    public function get_status_code($en, $em, $source = null) {
         
         if(isset($en) && isset($em) ){
             
@@ -30,5 +30,19 @@ class StatusCodes {
             }
 
         }            
-    }    
+    }
+    
+    //logger
+    public function simple_logger($status, $service, $email_data){
+
+        //build log
+        $log_data = $status . ', ' . $service . ', ' . $email_data['from_email'] . ', ' . $email_data['to_email'] . ', ' . time() . "\n";
+        try{
+            file_put_contents('../tmp/email.log', $log_data, FILE_APPEND | LOCK_EX);
+        } catch(Exception $e) {
+//            var_dump($e);die;
+        }
+
+    }
+    
 }

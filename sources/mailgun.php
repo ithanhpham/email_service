@@ -8,7 +8,7 @@ if(!defined('ACCESS') ) { die('permission denied');}
  * assume variables for mailgun will be the same
  */
 
-require_once('../helpers/StatusCodes.php');
+require_once('../helpers/SystemHelper.php');
 require_once('../helpers/Data.php');
 
 class mailgun {
@@ -17,10 +17,10 @@ class mailgun {
     private $base_url           = 'https://api.mailgun.net/v2';
     private $domain             = 'thanhsguitar.com';
     
-    public function __construct($email_data) { 
+    public function __construct($email_data) {  
             $this->_email_data = $email_data->_email_data;
-            $this->status_code = new StatusCodes;
-            $this->data        = new Data($this->_email_data);                      
+            $this->system      = new SystemHelper;
+            $this->data        = new Data($this->_email_data);       
     }
     
     
@@ -33,7 +33,7 @@ class mailgun {
         $curl_url          = null;
         $this->_email_data = $this->data->_email_data;
         if( !$this->mod_email_fields() ) {
-            $r = $this->status_code->get(400, 'Bad parameters', 'mailgun');
+            $r = $this->system->get_status_code(400, 'Bad parameters', 'mailgun');
             return $r;         
         }
             
@@ -52,34 +52,54 @@ class mailgun {
                 $c_r = curl_exec($ch);                 
                 curl_close($ch);
 
-                if( strpos($c_r, 'Queued') !== false) {
-                    $r = $this->status_code->get(200, json_decode($c_r), 'mailgun');
+                if( strpos($c_r, 'Queued') !== false) { 
+                    $r = $this->system->get_status_code(200, json_decode($c_r), 'mailgun');
+                    //log it
+                    try {
+                        $this->system->simple_logger('SUCCESS', 'MAILGUN', $this->_email_data);                                    
+                    } catch (Exception $ex) { } 
                     return $r;                    
 
                 } else { 
-                    $r = $this->status_code->get(400, "Client Error: $c_r", 'mailgun');
+                    $r = $this->system->get_status_code(400, "Client Error: $c_r", 'mailgun');
+                    //log it
+                    try {
+                        @$this->system->simple_logger('FAILURE', 'MAILGUN: Client Error: ' . $c_r, $this->_email_data);                                    
+                    } catch (Exception $ex) { }                       
                     return $r;   
                 }
 
               } else {
-                  $r = $this->status_code->get(400, 'Invalid service URL', 'mailgun');
+                  $r = $this->system->get_status_code(400, 'Invalid service URL', 'mailgun');
+                    //log it
+                    try {
+                        @$this->system->simple_logger('FAILURE', 'MAILGUN: Invalid Service URL', $this->_email_data);                                    
+                    } catch (Exception $ex) { }                     
                   return $r;
               }
 
         } catch(Exception $e) {
-          $r = $this->status_code->get(400, "Error calling client", 'mailgun');
+          $r = $this->system->get_status_code(400, "Error calling client", 'mailgun');
+        //log it
+        try {
+            @$this->system->simple_logger('FAILURE', 'MAILGUN: Error calling client', $this->_email_data);                                    
+        } catch (Exception $ex) { }           
           return $r;
 
         }
     }
     
-    protected function mod_email_fields(){
+    protected function mod_email_fields(){ 
         try{
             $this->_email_data['from'] = $this->_email_data['from_email'];
             $this->_email_data['to'] = $this->_email_data['to_email'];
             return true;            
         } catch (Exception $e) {
-            $r = $this->status_code->get(400, $e, 'mailgun');
+            $r = $this->system->get_status_code(400, $e, 'mailgun');
+            //log it
+            try {
+                @$this->system->simple_logger('FAILURE', 'MAILGUN: mod_email_fields', $this->_email_data);                                    
+            } catch (Exception $ex) { }              
             return $r;
         }
     }

@@ -8,7 +8,7 @@ if(!defined('ACCESS') ) { die('permission denied');}
  * 
  */
 
-require_once('../helpers/StatusCodes.php');
+require_once('../helpers/SystemHelper.php');
 require_once('../helpers/Data.php');
 
 class mandrill {
@@ -21,7 +21,7 @@ class mandrill {
     public function __construct($email_data) { 
 
             $this->_email_data = $email_data->_email_data;
-            $this->status_code = new StatusCodes;
+            $this->system      = new SystemHelper;
             $this->data        = new Data($this->_email_data);        
         
     }
@@ -57,30 +57,46 @@ class mandrill {
 
                     $c_r = curl_exec($ch);                 
                     curl_close($ch);
-                    
+                                        
                     //standardize the json output.
                     $c_r = ltrim(trim($c_r), '[');
                     $c_r = rtrim($c_r, ']'); 
                     
                     if( strpos($c_r, '"status":"error"') === false) {
-                        return( $this->status_code->get(200, json_decode($c_r), 'mandrill') );                    
+                        //log it
+                        try {
+                            @$this->system->simple_logger('SUCCESS', 'MANDRILL', $this->_email_data);                                    
+                        } catch (Exception $ex) { }                          
+                        return( $this->system->get_status_code(200, json_decode($c_r), 'mandrill') );                    
                         
                     } else {
-                        return( $this->status_code->get(400, "Client Error: $c_r", 'mandrill') );
+                        //log it
+                        try {
+                            @$this->system->simple_logger('FAILURE', 'MANDRILL: Client Error: ' . $c_r, $this->_email_data);                                    
+                        } catch (Exception $ex) { }                          
+                        return( $this->system->get_status_code(400, "Client Error: $c_r", 'mandrill') );
                     }
                     
                 } else {
-                      return( $this->status_code->get(400, 'Invalid service URL', 'mandrill') );
+                      //log it
+                      try {
+                           @$this->system->simple_logger('FAILURE', 'MANDRILL: Invalid service URL', $this->_email_data);                                    
+                      } catch (Exception $ex) { }                      
+                      return( $this->system->get_status_code(400, 'Invalid service URL', 'mandrill') );
                 }
                           
             } catch(Exception $e){
 
-                return( $this->status_code->get(400, $e->getMessage(), 'mandrill') );            
+                return( $this->system->get_status_code(400, filter_var($e->getMessage(), FILTER_SANITIZE_STRING), 'mandrill') );            
 
             }
             
-        } else {       
-            return( $this->status_code->get(400, 'Bad Request: often a missing or empty parameters(email)', 'mandrill') );
+        } else {
+            //log it
+            try {
+                 @$this->system->simple_logger('FAILURE', 'MANDRILL: missing param', $this->_email_data);                                    
+            } catch (Exception $ex) { }             
+            return( $this->system->get_status_code(400, 'Bad Request: often a missing or empty parameters(email)', 'mandrill') );
 
         }
         

@@ -13,7 +13,7 @@
 	<div id="form_container">
 	
 		<h1><a>ACME email form</a></h1>
-		<form id="form_867176" class="appnitro"  method="post" action="controller/mailer?entry=f4S!nd3FDs">
+		<form id="form_867176" class="appnitro"  method="post" action="controller/mailer.php">
 					<div class="form_description">
 			<h2>ACME email form</h2>
 			<p>Email test form</p>

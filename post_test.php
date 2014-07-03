@@ -4,44 +4,56 @@
  * Author:  Thanh Pham
  * purpose: PHP posting mailer tester
  */
-if($_SERVER['HTTP_HOST'] == 'thanhsguitar.com') {
-    $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer?entry=f4S!nd3FDs'; 
-} else { //local
-    $url = 'http://localhost:8888/email_service/controller/mailer?entry=f4S!nd3FDs';    
+
+//get host, redirect as needed
+switch ($_SERVER['HTTP_HOST']) {
+    
+    case 'thanhsguitar.com':
+        $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
+        break;
+    
+    case 'herokuapp.com':
+        $url = 'https://thanh-email-service.herokuapp.com/controller/mailer.php'; 
+        break;
+        
+    default:
+        $url = 'http://localhost:8888/email_service/controller/mailer.php';    
+        break;
 }
     
-$email_data  = array('from'       => 'Thanh Pham',
+$email_data  = array(
+                     'from'       => 'Thanh Pham',
                      'from_email' => 'artofguitar@gmail.com',
                      'to'         => 'Tester',
                      'to_email'   => 'artofguitar+1@gmail.com',
                      'subject'    => time() . ' Just seeing...',
-                     'text'       => 'if this emailer is going to jump over the lazy fox.');
+                     'text'       => 'if this emailer is going to jump over the lazy fox.',
+                     'key'        => '573f1ba65c9dce76a856c206eb8445c0c5e71a45');
 
 $options = array(
-    'http' => array(
-        'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-        'method'  => 'POST',
-        'content' => http_build_query($email_data),
+    'https' => array(
+                    'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+                    'method'  => 'POST',
+                    'content' => http_build_query($email_data),
     ),
 );
 
 $context  = stream_context_create($options);
 
 //try using file_get_contents
-//try {
-//    $result = @file_get_contents($url, false, $context);
-//    $result = json_decode($result);
-//    if($result == null) {
-//        $result =  '"status", "fail"';
-//        $result = json_decode($result);
-//    }
-//} catch (Exception $ex) {
-//    $result->status = 'error';
-//}
+try {
+    $result = @file_get_contents($url, false, $context);
+    $result = json_decode($result);
+    if($result == null) {
+        $result =  '"status", "fail"';
+        $result = json_decode($result);
+    }
+} catch (Exception $ex) {
+    $result->status = 'error';
+}
 
 //try to cURL it if $result is NULL
-//if($result == null) {
-if(1 === 1){    
+if($result == null) {
     try {
         $curl_url = $url;
 
@@ -68,8 +80,9 @@ if(1 === 1){
 } 
 
 
-if($result->status === 200) {
-    print_r(json_encode($result));    
+if($result->status === 200) {    
+    print_r(json_encode($result));
+    
 } else {
     $status = array('status' => 'error', 'result' => 'the service failed. Try a different method of calling the service.');
     print_r(json_encode($status));

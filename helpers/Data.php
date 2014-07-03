@@ -35,7 +35,7 @@ require_once('SystemHelper.php');
                 }
 
             //check for the correct number of params
-            if(sizeof($this->_email_data) !== 6) {
+            if(sizeof($this->_email_data) !== 7) {
                 
                 $this->system->get_status_code(400, 'Bad Request: often a missing or empty parameters(email)');
 //                exit();      

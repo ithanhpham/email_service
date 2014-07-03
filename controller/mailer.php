@@ -7,26 +7,30 @@
  *                if service fails, 
  *                    use other service
  * response:  JSON
- * date:      June 29, 2014
+ * date:      July 2, 2014
  * 
  */
 
 
 class mailer {
-    
+
+    private $private_key = '573f1ba65c9dce76a856c206eb8445c0c5e71a45';
+
     public function __construct() {
         try {
             $this->_email_data = @filter_var($_POST, FILTER_SANITIZE_STRING);
         } catch(Exception $e) { }
         
         try {
-            $this->entry       = @filter_var($_GET['entry'], FILTER_SANITIZE_STRING);        
+            $this->key         = @filter_var($_POST['key'], FILTER_SANITIZE_STRING);        
         } catch(Exception $e) { }
+
     }
     
+    //if key matches, try to send email via mailgun, else mandrill
     public function send() {
-        
-        if($this->entry !== "f4S!nd3FDs" ) {
+
+        if($this->key !== $this->private_key ) {
                 $status = array('status' => 400, 'result' => 'Missing the required field to use the service');
                 print_r(json_encode($status));
                 exit;
@@ -42,9 +46,11 @@ class mailer {
 
             $email_data_fields = new data($form_data);
             $required_params   = $email_data_fields->cleaner(); 
+            
+            header('Content-Type: application/json; charset=utf-8');                    
 
             if( isset($required_params->error['error']) || ($required_params === false) ) {
-                $status = array('status' => 400, 'result' => 'Missing required fields (from, from_email, to, to_email, subject, text)');
+                $status = array('status' => 400, 'result' => 'Missing or malformed required fields (from, from_email, to, to_email, subject, text)');
                 print_r(json_encode($status));
 
             } else {
@@ -82,7 +88,6 @@ class mailer {
         } else {
             $status = array('status' => 405, 'result' => "Wrong HTTP method(" . $_SERVER['REQUEST_METHOD'] . ")");
             print_r(json_encode($status));        
-            exit();
         }  
 
     }

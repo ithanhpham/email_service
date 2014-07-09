@@ -1,3 +1,97 @@
+<?php 
+session_start();
+
+date_default_timezone_set("UTC");      
+
+//which server to use?
+function service_domain(){
+    
+    switch ($_SERVER['HTTP_HOST']) {    
+    
+        case 'thanhsguitar.com':
+            define('DOMAIN', 'http://thanhsguitar.com');
+            $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
+            break;
+
+        case 'herokuapp.com':
+            define('DOMAIN', 'https://thanh-email-service.herokuapp.com');            
+            $url = 'https://thanh-email-service.herokuapp.com/controller/mailer.php'; 
+            break;
+
+        default:
+            define('DOMAIN', 'http://localhost:8888/email_service');                        
+            $url = 'http://localhost:8888/email_service/controller/mailer.php';    
+            break;
+        }
+        return $url;
+}
+
+//if data is sent from the form
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+    
+    if( isset($_GET['form_status']) && ($_GET['form_status'] == 'thanks') ){
+
+        //robot?
+        if(!empty($_POST['address'])){
+            header('Location: form_test.php');    
+            
+        } elseif( !isset($_SESSION['address2']) ||  ($_SESSION['address2'] !== $_POST['address2']) ){
+            
+            $curl_url = service_domain();
+
+            $email_data  = array(
+                                 'from'       => filter_var(trim($_POST['from']),       FILTER_SANITIZE_STRING),
+                                 'from_email' => filter_var(trim($_POST['from_email']), FILTER_SANITIZE_EMAIL),
+                                 'to'         => filter_var(trim($_POST['to']),         FILTER_SANITIZE_STRING),
+                                 'to_email'   => filter_var(trim($_POST['to_email']),   FILTER_SANITIZE_EMAIL),
+                                 'subject'    => filter_var(trim($_POST['subject']),    FILTER_SANITIZE_STRING),
+                                 'text'       => filter_var(trim($_POST['text']),       FILTER_SANITIZE_STRING),
+                                 'key'        => '573f1ba65c9dce76a856c206eb8445c0c5e71a45'
+                                );
+
+            try {
+                if( filter_var(trim($curl_url, FILTER_VALIDATE_URL)) ){ 
+                    $_POST['form_used'] = 'thank_you'; //prevent page from executing call again
+
+                    $ch  = curl_init();
+                    curl_setopt($ch, CURLOPT_POST, 1);
+                    curl_setopt($ch, CURLOPT_URL, $curl_url);
+                    curl_setopt($ch, CURLOPT_POSTFIELDS, $email_data);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    $c_r = curl_exec($ch);
+                    curl_close($ch);
+
+                    $result = json_decode($c_r);
+                    
+                    $_SESSION['address2'] = $_POST['address2'];
+
+                    print_r(json_encode($result));    
+
+                    exit;
+                }
+            } catch (Exception $ex) {
+                $result->status = 'failed';
+                $result->result = 'could not execute the mailer call';
+                exit;
+            }
+        
+        } 
+        else {
+            header("Location: form_test.php");
+            session_destroy();
+            exit;
+        } // end of elseif( !isset($_SESSION['address2']) || ~ line 39
+        
+    } else {
+        die('error page invalid.');
+    }
+    
+    
+} else {
+    
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -8,12 +102,12 @@
 
 </head>
 <body id="main_body" >
-	
+
 	<img id="top" src="top.png" alt="">
 	<div id="form_container">
 	
 		<h1><a>ACME email form</a></h1>
-		<form id="form_867176" class="appnitro"  method="post" action="controller/mailer.php">
+		<form id="form_867176" class="appnitro"  method="post" action="form_test.php?form_status=thanks">
 					<div class="form_description">
 			<h2>ACME email form</h2>
 			<p>Email test form</p>
@@ -45,6 +139,7 @@
                 <input type="hidden" name="from" value="email tester"></input>
                 <input type="hidden" name="from_email" value="no-reply@emailtester.com"></input>
                 <input type="hidden" name="address" value=""></input>
+                <input type="hidden" name="address2" value="<?=  md5(time()); ?>"></input>
                     
                 
 			
@@ -62,3 +157,5 @@
 	<img id="bottom" src="bottom.png" alt="">
 	</body>
 </html>
+
+<?php } ?>

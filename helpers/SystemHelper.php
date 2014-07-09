@@ -1,19 +1,39 @@
 <?php
+if(!defined('ACCESS') ) { die('permission denied');}
 
 /* helper method for status codes */
 
 class SystemHelper {
     
-    protected function get_status_code($en, $em, $source = null) {
+    //service domains
+    public function service_domain(){
+        switch ($_SERVER['HTTP_HOST']) {
+
+        case 'thanhsguitar.com':
+            define('DOMAIN', 'http://thanhsguitar.com');
+            $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
+            break;
+
+        case 'herokuapp.com':
+            define('DOMAIN', 'https://thanh-email-service.herokuapp.com');            
+            $url = 'https://thanh-email-service.herokuapp.com/controller/mailer.php'; 
+            break;
+
+        default:
+            define('DOMAIN', 'http://localhost:8888/email_service');                        
+            $url = 'http://localhost:8888/email_service/controller/mailer.php';    
+            break;
+        }
+        return $url;
+    }
+    
+    public function get_status_code($en, $em, $source = null) {
         
         if(isset($en) && isset($em) ){
             
-            header($_SERVER["SERVER_PROTOCOL"] . $en);
-            header("Content-Type: application/json"); 
-                    
             if(isset($source)) {
                 if($en >= 200 && $en < 300) {
-                    $this->status = array('status' => $en, 'source' => $source, 'result' => $em);                   
+                    $this->status = array('status' => $en, 'source' => $source, 'result' => $em);
                     return($this->status);
 
                 } else {
@@ -34,14 +54,8 @@ class SystemHelper {
         }            
     }
     
-    protected function json_header($status_code){
-            
-        header($_SERVER["SERVER_PROTOCOL"] . $status_code);
-        header("Content-Type: application/json");
-    }    
-    
     //logger
-    protected function simple_logger($status, $service, $email_data){
+    public function simple_logger($status, $service, $email_data){
 
         //build log
         $log_data = $status . ', ' . $service . ', ' . $email_data['from_email'] . ', ' . $email_data['to_email'] . ', ' . time() . "\n";

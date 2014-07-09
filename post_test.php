@@ -22,16 +22,16 @@ switch ($_SERVER['HTTP_HOST']) {
 }
     
 $email_data  = array(
-                     'from'       => 'Thanh Pham',
-                     'from_email' => 'artofguitar@gmail.com',
-                     'to'         => 'Tester',
-                     'to_email'   => 'artofguitar+1@gmail.com',
-                     'subject'    => time() . ' Just seeing...',
-                     'text'       => 'if this emailer is going to jump over the lazy fox.',
+                     'from'       => '',
+                     'from_email' => '',
+                     'to'         => '',
+                     'to_email'   => '',
+                     'subject'    => '',
+                     'text'       => '',
                      'key'        => '573f1ba65c9dce76a856c206eb8445c0c5e71a45');
 
 $options = array(
-    'https' => array(
+    'http' => array(
                     'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
                     'method'  => 'POST',
                     'content' => http_build_query($email_data),

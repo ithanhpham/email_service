@@ -1,11 +1,23 @@
 <?php
-    require_once('../controller/mailerController.php');
+
+define('ACCESS', true);                     //access to other classes
+
+if(!isset($_SERVER['REQUEST_URI'])){
+    
+    require_once('../helpers/SystemHelper.php');    
+    require_once('../controller/mailer.php');    
+} else {
+    
+    require_once('helpers/SystemHelper.php');    
+    require_once('controller/mailer.php');
+    
+}
 
 
 class mailerTest extends PHPUnit_Framework_TestCase {
-
+//
     public function __construct(){
-        $this->emailerClass = new mailerController();          
+        $this->emailerClass = new mailer();          
     }
     //test the controller
     //this should calling the class w/o params should be false
@@ -16,9 +28,9 @@ class mailerTest extends PHPUnit_Framework_TestCase {
         $result2 = json_decode( $this->emailerClass->send() );
         
         $this->assertTrue(empty($this->emailerClass->key));
-        
+
         //must be a post 
-        $this->assertTrue($result2->status === 405 );
+        $this->assertTrue($result2->status == 405 );
         
         $this->assertContains('Wrong HTTP method', $result2->result);               
                 
@@ -29,23 +41,7 @@ class mailerTest extends PHPUnit_Framework_TestCase {
     //test using curl
     public function testPost(){
         //build URL to curl
-        switch ($_SERVER['HTTP_HOST']) {
-
-        case 'thanhsguitar.com':
-            $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
-            break;
-
-        case 'herokuapp.com':
-            $url = 'https://thanh-email-service.herokuapp.com/controller/mailer.php'; 
-            break;
-
-        default:
-            $url = 'http://localhost:8888/email_service/controller/mailer.php';    
-            break;
-        }
-        
-        $curl_url = $url;
-        unset($url);
+        $curl_url = SystemHelper::service_domain();
 
         if(filter_var($curl_url, FILTER_VALIDATE_URL) ){ 
             $ch = curl_init();

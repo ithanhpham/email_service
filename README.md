@@ -1,4 +1,9 @@
 ## README.md Outline
+http://thanh-email-service.herokuapp.com (readme/index)
+
+http://thanh-email-service.herokuapp.com/form_test.php (text form)
+
+http://thanh-email-service.herokuapp.com/controller/mailer (email service endpoint - curled or used in Google Rest Console)
 
 
 * email service
@@ -15,7 +20,8 @@ I chose the email service because I enjoy writing backend code, have some experi
 
 * trade-offs/more info
 
-The usual trade-offs of speed vs quality vs price comes into play. Due to time constraints, I wasn't able to incorporate this into a framework like CodeIgniter to give it a MVC framework. This would allow routing to be seemless and less time on writing sanitization code. Like with any API that we write at my current company, I would like to write more detailed unit tests. This would especially be important for all the use cases due to dependancies on the third parties. Getting this deployed on Amazon was also a challenge. Again, this is due to time constraints. With more time, I'd like to have a nice interface test out the service.
+The usual trade-offs of speed vs quality vs price comes into play. Due to time constraints, I wasn't able to incorporate this into a framework like CodeIgniter to give it a MVC framework. This would allow routing to be seemless and less time on writing sanitization code. Like with any API that we write at my current company, I would like to write more detailed unit tests. This would especially be important for all the use cases due to dependancies on the third parties. Getting this deployed on Amazon EC2 was also a challenge. Again, this is due to time constraints, so it was deployed to Heroku. With more time, I'd like to have a nice interface test out the service. With error-handling but this is mostly focused on the service/backend.
+
 logic
 
 * the logic in the controller:

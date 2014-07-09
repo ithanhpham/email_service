@@ -1,7 +1,10 @@
 ## README.md Outline
 http://thanh-email-service.herokuapp.com (readme/index)
+
 http://thanh-email-service.herokuapp.com/form_test.php (text form)
+
 http://thanh-email-service.herokuapp.com/controller/mailer (email service endpoint - curled or used in Google Rest Console)
+
 
 * email service
 

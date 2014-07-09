@@ -13,16 +13,17 @@ function service_domain(){
             $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
             break;
 
-        case 'herokuapp.com':
-            define('DOMAIN', 'https://thanh-email-service.herokuapp.com');            
-            $url = 'https://thanh-email-service.herokuapp.com/controller/mailer.php'; 
+        case 'thanh-email-service.herokuapp.com':
+            define('DOMAIN', 'http://thanh-email-service.herokuapp.com');            
+            $url = 'http://thanh-email-service.herokuapp.com/controller/mailer'; 
             break;
 
         default:
             define('DOMAIN', 'http://localhost:8888/email_service');                        
-            $url = 'http://localhost:8888/email_service/controller/mailer.php';    
+            $url = 'http://localhost:8888/email_service/controller/mailer';    
             break;
         }
+
         return $url;
 }
 
@@ -66,9 +67,15 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                     $_SESSION['address2'] = $_POST['address2'];
 
-                    print_r(json_encode($result));    
+                    if(!empty($result)) {
+                        
+                        print_r(json_encode($result));    
+                        exit;                        
+                    } else {
+                        
+                        die('Sorry! Error calling the service.');
+                    }
 
-                    exit;
                 }
             } catch (Exception $ex) {
                 $result->status = 'failed';

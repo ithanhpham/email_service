@@ -14,14 +14,14 @@ class SystemHelper {
             $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
             break;
 
-        case 'herokuapp.com':
+        case 'thanh-email-service.herokuapp.com"':
             define('DOMAIN', 'https://thanh-email-service.herokuapp.com');            
-            $url = 'https://thanh-email-service.herokuapp.com/controller/mailer.php'; 
+            $url = 'https://thanh-email-service.herokuapp.com/controller/mailer'; 
             break;
 
         default:
             define('DOMAIN', 'http://localhost:8888/email_service');                        
-            $url = 'http://localhost:8888/email_service/controller/mailer.php';    
+            $url = 'http://localhost:8888/email_service/controller/mailer';    
             break;
         }
         return $url;

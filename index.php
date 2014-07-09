@@ -12,6 +12,16 @@ and open the template in the editor.
     <body>
 
         <h1>Email service</h1>
+        
+
+<li><a href="http://thanh-email-service.herokuapp.com">http://thanh-email-service.herokuapp.com</a> (readme/index)</li>
+
+<li><a href="http://thanh-email-service.herokuapp.com/form_test.php">http://thanh-email-service.herokuapp.com/form_test.php</a> (text form)</li>
+
+<li><a href="http://thanh-email-service.herokuapp.com/controller/mailer">http://thanh-email-service.herokuapp.com/controller/mailer</a> (email service endpoint - curled or used in Google Rest Console)</li>
+<br>
+
+        
         <h2>project</h2> 
         <p>The purpose of this service is to send out email with a backup. One of the strengths of this service is that if a dependency on 3rd party service fails,
             the service will try to use a different email api. The main email service is MailGun and the backup is Mandrill.</p>

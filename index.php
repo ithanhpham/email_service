@@ -13,12 +13,12 @@ and open the template in the editor.
 
         <h1>Email service</h1>
         <h2>project</h2> 
-        <p>This is an email service that is called to send out email. One of the strengths of this service is that if a dependency on 3rd party service fails,
+        <p>The purpose of this service is to send out email with a backup. One of the strengths of this service is that if a dependency on 3rd party service fails,
             the service will try to use a different email api. The main email service is MailGun and the backup is Mandrill.</p>
         <h2>application track</h2>
         <p>backend developer</p>
 
-        <h2>Reason why</h2>
+        <h2>reason why</h2>
         <p>I chose the email service because I enjoy writing backend code, have some experience using mailgun in my current job's dev portal  and it's 
             something that can be re-used at some other point. I used PHP as the backend because I am most familiar with that language. 
             I have 2.5+ years with it. My QA background always has me thinking about use cases which helps with the quality of the application.</p>
@@ -26,7 +26,7 @@ and open the template in the editor.
         <h2>trade-offs/more info</h2>
         The usual trade-offs of speed vs quality vs price comes into play. Due to time constraints, I wasn't able to incorporate this into a framework like CodeIgniter to give it a MVC framework. This would allow routing to be seemless and less time on writing sanitization code.
 
-Like with any API that we write at my current company, I would like to write unit tests. This would especially be important for all the use cases due to dependancies on the third parties. Getting this deployed on Amazon was also a challenge. Again, this is due to time constraints. With more time, I'd like to have a nice interface test out the service.
+Like with any API that we write at my current company, I would like to write more detailed unit tests. This would especially be important for all the use cases due to dependancies on the third parties. Getting this deployed on Amazon was also a challenge. Again, this is due to time constraints. With more time, I'd like to have a nice interface test out the service.
 
 <h2>logic</h2>
 
@@ -42,6 +42,7 @@ Like with any API that we write at my current company, I would like to write uni
     
 <h2>Example:</h2> 
 
+<ul>
 <blockquote><div class='code' style="font-family: helvetica, arial, sans-serif">curl -X POST 'https://thanh-email-service.herokuapp.com/email_service/controller/mailer.php' -d "from=from name" -d "from_email=EMAIL" -d "to=to name" -d "to_email=EMAIL" -d "subject=sweet subject" -d "text=" -d "key=KEY" </div></blockquote>
 
     <li>the email requires a POST</li>
@@ -96,6 +97,6 @@ Like with any API that we write at my current company, I would like to write uni
         </ul>
         
     </li>
-
+</ul>
     </body>
 </html>

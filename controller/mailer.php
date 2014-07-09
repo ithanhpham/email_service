@@ -29,14 +29,18 @@ class mailer {
     
     //if key matches, try to send email via mailgun, else mandrill
     public function send() {
-
-        if($this->key !== $this->private_key ) {
-                $status = array('status' => 400, 'result' => 'Missing the required field to use the service');
-                print_r(json_encode($status));
-                exit;
-            }
+        
         // Mailer only accepts POST requests
          if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'){
+             
+             if($this->key !== $this->private_key ) {
+                $status = array('status' => 400, 'result' => 'Missing the required field to use the service');
+                print_r(json_encode($status));
+                return(json_encode($status)); //unit tests
+                
+                exit;
+            }
+            
             define('ACCESS', true);                     //access to other classes
 
             $form_data = filter_input_array(INPUT_POST, FILTER_UNSAFE_RAW);
@@ -87,7 +91,9 @@ class mailer {
 
         } else {
             $status = array('status' => 405, 'result' => "Wrong HTTP method(" . $_SERVER['REQUEST_METHOD'] . ")");
-            print_r(json_encode($status));        
+            print_r(json_encode($status));
+            return(json_encode($status)); //unit tests
+            
         }  
 
     }

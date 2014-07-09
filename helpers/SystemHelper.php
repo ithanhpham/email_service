@@ -5,6 +5,28 @@ if(!defined('ACCESS') ) { die('permission denied');}
 
 class SystemHelper {
     
+    //service domains
+    public function service_domain(){
+        switch ($_SERVER['HTTP_HOST']) {
+
+        case 'thanhsguitar.com':
+            define('DOMAIN', 'http://thanhsguitar.com');
+            $url = 'http://thanhsguitar.com/projects/email_service/controller/mailer'; 
+            break;
+
+        case 'herokuapp.com':
+            define('DOMAIN', 'https://thanh-email-service.herokuapp.com');            
+            $url = 'https://thanh-email-service.herokuapp.com/controller/mailer.php'; 
+            break;
+
+        default:
+            define('DOMAIN', 'http://localhost:8888/email_service');                        
+            $url = 'http://localhost:8888/email_service/controller/mailer.php';    
+            break;
+        }
+        return $url;
+    }
+    
     public function get_status_code($en, $em, $source = null) {
         
         if(isset($en) && isset($em) ){
